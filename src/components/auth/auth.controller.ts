@@ -3,8 +3,6 @@ import {
   Controller,
   HttpCode,
   Post,
-  Delete,
-  Param,
   Request,
   UnauthorizedException,
   UseGuards,
