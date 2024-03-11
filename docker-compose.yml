@@ -1,0 +1,64 @@
+version: '3'
+services:
+  app:
+    image: node:18.16.0
+    container_name: app
+    command: bash -c "npm run start:dev"
+    working_dir: /var/www/app
+    volumes:
+      - ./:/var/www/app:cached
+    restart: always
+    ports:
+      - 3000:3000
+    links:
+      - mongodb
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb-volume:/data/db
+
+  redis:
+    image: redis:6
+    container_name: redis
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-volume:/data
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_URL="mongodb://mongodb:27017/app"
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_BASICAUTH_USERNAME=root
+      - ME_CONFIG_BASICAUTH_PASSWORD=root
+      - ME_CONFIG_OPTIONS_EDITORTHEME="ambiance"
+    depends_on:
+      - mongodb
+    ports:
+      - 8888:8081
+    profile:
+      - donotstart
+
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    container_name: redisinsight
+    ports:
+      - 8001:8001
+    volumes:
+      - redisinsight-volume:/db
+    profile:
+      - donotstart
+
+volumes:
+  mongodb-volume:
+  redis-volume:
+  redisinsight-volume:
