@@ -44,7 +44,6 @@ export default class AuthController {
   @ApiBody({ type: SignInDto })
   @ApiOkResponse({ description: 'Returns jwt tokens' })
   @ApiInternalServerErrorResponse({ description: '500. InternalServerError' })
-  @ApiBearerAuth()
   @HttpCode(200)
   @UseGuards(LocalAuthGuard)
   @Post('sign-in')
