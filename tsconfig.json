@@ -37,5 +37,9 @@
         "./src/__types__/*"
       ]
     }
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
